@@ -71,6 +71,17 @@ Site nhỏ đọc báo cáo để biết việc gì sửa ngay. Đừng biến b
 - Site mức 3 (nền tảng, xử lý dữ liệu nhiều người, kinh doanh dịch vụ xử lý dữ liệu): nghĩa vụ giấy tờ có thể xếp 🔴 như bình thường.
 - Sắp xếp báo cáo: việc sửa được trong một buổi lên trước, giấy tờ để cuối.
 
+## Tránh báo nhầm
+
+Báo cáo nhầm làm site làm tốt trông như đang sai, và người đọc mất niềm tin vào cả báo cáo. Trước khi chốt mỗi 🔴, kiểm tra:
+
+- **"Không tìm thấy" không phải là "không có".** Kết luận dựa trên việc không thấy nội dung (thiếu email, thiếu trang chính sách, thiếu điều khoản) tối đa 🟡, viết dạng "Chưa tìm thấy ... trong các file/trang đã xem". Khi quét theo URL, nội dung có thể nằm trong ảnh, trong phần tải bằng JavaScript hoặc ở trang chưa tải.
+- **Chỉ kiểm tra ô đồng ý ở form thu dữ liệu mới:** đăng ký, nhận tin, liên hệ, đặt hàng, thanh toán. Bỏ qua form đăng nhập, quên mật khẩu, tìm kiếm.
+- **Tín hiệu mobile (quyền app, SDK) chỉ dùng khi có dấu hiệu app thật.** `scan.sh` đã tự bỏ qua khi không thấy file của app.
+- **Ghi cả điểm làm tốt.** Mục 🟢 có bằng chứng (ví dụ tracking chỉ chạy sau khi đồng ý) nêu ngắn ở phần tóm tắt đầu báo cáo, để báo cáo cân bằng.
+- **Mức phạt chỉ nêu khi có 🔴 với bằng chứng chắc,** và chỉ nêu dòng ứng với đúng 🔴 đó. Không có 🔴 thì bỏ mục mức phạt.
+
+
 ## Cách báo cáo cho site mức 0-1
 
 - Không liệt kê đủ 8 bảng checklist với hàng loạt ⚪. Báo cáo sẽ loãng và không ai đọc hết.

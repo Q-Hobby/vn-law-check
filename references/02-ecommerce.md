@@ -31,7 +31,7 @@ Mỗi loại nền tảng có thêm nghĩa vụ riêng ở Điều 16-20.
 
 - [ ] Tên chủ sở hữu, địa chỉ, mã số thuế, email, số điện thoại.
 - [ ] Số giấy chứng nhận đăng ký doanh nghiệp (nếu là thương nhân).
-- [ ] Quy chế hoạt động / điều khoản sử dụng.
+- [ ] Quyền và nghĩa vụ các bên (khoản 1 Điều 11): với site tự bán hàng, chấp nhận nhiều tên trang như điều khoản sử dụng, điều kiện giao dịch chung, chính sách mua hàng. "Quy chế hoạt động" chỉ yêu cầu với sàn trung gian, nền tảng có người bán bên thứ ba (mức 3).
 - [ ] Chính sách đổi trả, hoàn tiền.
 - [ ] Chính sách vận chuyển, giao nhận.
 - [ ] Chính sách bảo vệ dữ liệu cá nhân (xem checklist 01).

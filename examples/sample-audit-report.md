@@ -60,6 +60,7 @@ Có 2 mẫu. Chọn theo mức ở bước triage (`references/00-triage.md`):
 **Ngày audit:** [ngày]
 **Kết quả quét:** mức [2/3]. [tóm tắt tín hiệu kèm file:dòng, ví dụ: giỏ hàng ở `pages/product.html:7`, cổng VNPay ở `checkout.js:2`]
 **Phạm vi rà soát:** [chỉ liệt kê checklist có áp dụng]
+**Điểm làm tốt:** [1-2 mục 🟢 có bằng chứng rõ nhất, ví dụ: tracking chỉ chạy sau khi người dùng bấm đồng ý. Bỏ dòng này nếu không có.]
 
 #### Tổng quan
 
@@ -84,7 +85,7 @@ Chỉ ghi các lĩnh vực có áp dụng.
 - ...
 
 #### Mức phạt tham khảo
-[Chỉ nêu với các mục 🔴, theo `references/08-penalties-reference.md`. Ghi "mức tối đa theo quy định tham khảo được", không khẳng định site sẽ bị phạt bao nhiêu.]
+[Chỉ nêu khi có mục 🔴 với bằng chứng chắc, và chỉ dòng ứng với đúng 🔴 đó, theo `references/08-penalties-reference.md`. Không có 🔴 thì bỏ cả mục này. Ghi "mức tối đa theo quy định tham khảo được", không khẳng định site sẽ bị phạt bao nhiêu.]
 
 #### Giới hạn & khuyến nghị
 

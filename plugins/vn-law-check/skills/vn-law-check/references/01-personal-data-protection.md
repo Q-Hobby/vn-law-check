@@ -33,6 +33,9 @@
 - [ ] Chính sách phân biệt dữ liệu cơ bản và dữ liệu nhạy cảm. NĐ 356/2025 mở rộng danh sách dữ liệu nhạy cảm, trong đó có dữ liệu theo dõi hành vi trên mạng xã hội/dịch vụ trực tuyến, thông tin tài khoản và thẻ ngân hàng, mật khẩu định danh điện tử (điểm i, k, l khoản 1 Điều 4 NĐ 356/2025). Khi xin đồng ý xử lý dữ liệu nhạy cảm, phải báo cho người dùng biết đó là dữ liệu nhạy cảm (khoản 4 Điều 6 NĐ 356/2025).
 
 ## B. Sự đồng ý
+
+Chỉ áp mục này cho form thu dữ liệu mới (đăng ký, nhận tin, liên hệ, đặt hàng, thanh toán), không áp cho form đăng nhập, quên mật khẩu, tìm kiếm.
+
 - [ ] Xin đồng ý trước khi thu thập/xử lý. Sự đồng ý phải tự nguyện, rõ ràng, kiểm chứng được, tách riêng theo từng mục đích (Điều 9 Luật 91/2025).
 - [ ] Im lặng hoặc không phản hồi không được coi là đồng ý (Điều 9 khoản 4 điểm d Luật 91/2025).
 - [ ] Không dùng ô tích sẵn, không chỉ dẫn gây nhầm lẫn giữa đồng ý và không đồng ý (khoản 3 Điều 6 NĐ 356/2025).

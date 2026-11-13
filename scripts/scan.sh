@@ -50,7 +50,7 @@ GREP_ARGS=(-rEIino "${INCLUDE[@]}" "${EXCLUDE_ARGS[@]}")
 # vì site React/Next chỉ lộ form trong file JS.
 SIGNALS=(
   "FORM|<form[ >]|jsxs?\(\"form\"|createElement\(\"form\"|formspree\.io|getform\.io|data-netlify=|docs\.google\.com/forms|type=[\"']email[\"']|type:[[:space:]]*[\"']email[\"']|keyboardType=[\"'](email-address|phone-pad)[\"']|textContentType=[\"'](emailAddress|telephoneNumber)[\"']|TextInputType\.(emailAddress|phone)"
-  "TRACKING|gtag\(|googletagmanager\.com|google-analytics\.com|fbq\(|connect\.facebook\.net|analytics\.tiktok\.com|clarity\.ms|hotjar|cdn\.segment\.com|plausible\.io|umami"
+  "TRACKING|gtag\(|googletagmanager\.com|google-analytics\.com|fbq\(|connect\.facebook\.net|analytics\.tiktok\.com|clarity\.ms|hotjar|cdn\.segment\.com|plausible\.io|umami|cdn\.mxpnl\.com|api\.mixpanel\.com|cdn\.amplitude\.com|api2?\.amplitude\.com"
   "COMMERCE|add[-_ ]?to[-_ ]?cart|addToCart|/checkout|/cart[\"'/]|giỏ hàng|thêm vào giỏ|mua ngay|[\"'>][[:space:]]*(đặt|Đặt|ĐẶT) (hàng|HÀNG)|(đặt|Đặt|ĐẶT) (mua|MUA)|thanh toán|vnpay|momo|zalopay|\"stripe\"|stripe\.com|paypal|woocommerce|shopify"
   "AUTH|/login|/register|/signin|/signup|sign[-_ ]?in|đăng nhập|next-auth|nextauth|firebase/auth|supabase\.auth|passport|@clerk|auth0"
   "MARKETPLACE|multi[-_ ]?vendor|seller[-_ ]?(dashboard|register|signup|onboard)|vendor[-_ ]?(dashboard|register)|người bán|kênh người bán|đăng ký bán hàng"
@@ -64,6 +64,18 @@ SIGNALS=(
 # Dùng biến FOUND_<TÊN> thay cho mảng kết hợp, vì macOS mặc định là bash 3.2 (không có declare -A)
 found() { local v="FOUND_$1"; [ "${!v:-0}" = 1 ]; }
 
+# Nhận diện mobile app qua file đặc trưng của từng nền tảng
+platforms=""
+if [ "$URL_MODE" = 0 ]; then
+  has() { [ -n "$(find "$DIR" \( -name node_modules -o -name Pods -o -name .dart_tool -o -name .git \) -prune -o "$@" -print 2>/dev/null | head -n 1)" ]; }
+  has -name pubspec.yaml && platforms="$platforms Flutter"
+  has -name package.json -exec grep -q '"react-native"' {} \; && platforms="$platforms React-Native"
+  has -name package.json -exec grep -q '"expo"' {} \; && platforms="$platforms Expo"
+  has -name AndroidManifest.xml && platforms="$platforms Android"
+  { has -name Info.plist || has -name '*.xcodeproj'; } && platforms="$platforms iOS"
+fi
+platforms="${platforms# }"
+
 echo "Quét: $([ "$URL_MODE" = 1 ] && echo "$TARGET" || echo "$DIR")"
 echo
 
@@ -71,6 +83,10 @@ for entry in "${SIGNALS[@]}"; do
   name="${entry%%|*}"
   regex="${entry#*|}"
   limit=3; [ "$name" = PERMISSIONS ] && limit=10
+  # Tín hiệu riêng của mobile app: chỉ xét khi thấy dấu hiệu app thật, tránh bắt nhầm thư viện web (mixpanel, amplitude...)
+  case "$name" in PERMISSIONS|SDK_TRACKING|ADS_SDK)
+    if [ -z "$platforms" ]; then echo "[không] $name   (chỉ xét với mobile app)"; continue; fi ;;
+  esac
   hits="$(grep "${GREP_ARGS[@]}" -e "$regex" "$DIR" 2>/dev/null | awk '!seen[$0]++' | head -n "$limit")"
   if [ "$name" = "FOREIGN_HOST" ] && [ -z "$hits" ]; then
     # Source code: nhận diện qua file cấu hình hosting
@@ -120,17 +136,6 @@ if found TRACKING; then
   fi
 fi
 
-# Nhận diện mobile app qua file đặc trưng của từng nền tảng
-platforms=""
-if [ "$URL_MODE" = 0 ]; then
-  has() { [ -n "$(find "$DIR" \( -name node_modules -o -name Pods -o -name .dart_tool -o -name .git \) -prune -o "$@" -print 2>/dev/null | head -n 1)" ]; }
-  has -name pubspec.yaml && platforms="$platforms Flutter"
-  has -name package.json -exec grep -q '"react-native"' {} \; && platforms="$platforms React-Native"
-  has -name package.json -exec grep -q '"expo"' {} \; && platforms="$platforms Expo"
-  has -name AndroidManifest.xml && platforms="$platforms Android"
-  { has -name Info.plist || has -name '*.xcodeproj'; } && platforms="$platforms iOS"
-fi
-platforms="${platforms# }"
 
 if [ -n "$platforms" ]; then
   echo "[có]    MOBILE_APP"
