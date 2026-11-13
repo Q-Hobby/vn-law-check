@@ -68,6 +68,8 @@ audit https://your-site.vn against Vietnamese law
 
 Reports are written in Vietnamese by default. Ask for English if you need it.
 
+Building with Lovable, Bolt, v0 or Cursor? Copy a ready-made prompt from [examples/vibe-coder-prompts.md](examples/vibe-coder-prompts.md) (in Vietnamese): app check, cookie banner that loads analytics only after consent, unticked consent box with a Supabase table to log consent, privacy policy page, delete-account button.
+
 ## Limits
 
 This is a first-pass review tool, not legal advice. Every report says so at the top. Items the maintainers could not verify against the full legal text are marked `CHƯA XÁC MINH` (unverified), and the agent is told not to invent article numbers or fine amounts. Corrections are logged publicly in the [correction history](sources/legal-references.md#lịch-sử-đính-chính-nội-dung-luật).

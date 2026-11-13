@@ -94,6 +94,10 @@ soạn chính sách bảo mật cho dự án này
 
 Agent soạn một bản nháp dựa trên code của bạn: site đang thu dữ liệu gì, gửi cho dịch vụ nào (Google Analytics, Firebase, OpenAI...), rồi gợi ý sửa form đồng ý, banner, privacy policy, và các điểm cần cân nhắc trước khi ship.
 
+### Làm app bằng Lovable, Bolt, v0 hay Cursor?
+
+Không cần cài gì. Mở [bộ prompt dán là chạy](examples/vibe-coder-prompts.md) (bản web: [mhfed.github.io/vn-law-check/prompt-cho-vibe-coder.html](https://mhfed.github.io/vn-law-check/prompt-cho-vibe-coder.html)), copy rồi dán vào khung chat của công cụ. Có sẵn prompt kiểm tra app theo luật Việt Nam, banner cookie chỉ bật Google Analytics, Pixel sau khi đồng ý, ô đồng ý và bảng Supabase lưu thời điểm đồng ý, trang chính sách bảo mật, nút xóa tài khoản.
+
 > Lưu ý: Repo này chỉ hướng dẫn AI làm rà soát sơ bộ, không đảm bảo kết quả đúng luật 100%. Mục tiêu là giúp bạn biết mình đang thiếu gì và cần chốt ở đâu. Nếu có hoạt động nhạy cảm về thu thập dữ liệu, thanh toán, quảng cáo hoặc AI, nên có bên pháp lý review lại.
 
 ## Hỏi nhanh
@@ -164,7 +168,7 @@ scripts/      scan.sh: quét source code hoặc URL, phát hiện form/tracking/
               với mobile app: quyền truy cập, SDK tracking/quảng cáo, chức năng xóa tài khoản
               fetch-site.sh: tải trang công khai của một URL để scan.sh quét
 sources/      văn bản pháp luật dẫn chiếu, ngày hiệu lực, link
-examples/     mẫu báo cáo (rút gọn, đầy đủ) + khung chính sách bảo mật, form đồng ý, banner cookie
+examples/     mẫu báo cáo (rút gọn, đầy đủ) + khung chính sách bảo mật, form đồng ý, banner cookie + prompt cho vibe coder
 tests/        site mẫu để kiểm tra scan.sh phân loại đúng
 tools/        sync.sh: sinh các bản copy cho từng tool từ nguồn gốc
 ```

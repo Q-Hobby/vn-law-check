@@ -4,12 +4,13 @@
 Chạy: python3 tools/build_site.py
 Nội dung lấy từ references/ (đã đối chiếu). Sửa nội dung luật ở references/ trước, rồi sửa trang ở đây cho khớp.
 """
-import html, json, pathlib
+import html, json, pathlib, re
 
 BASE = "https://mhfed.github.io/vn-law-check/"
 REPO = "https://github.com/mhfed/vn-law-check"
 UPDATED = "05/11/2026"
-OUT = pathlib.Path(__file__).resolve().parent.parent / "docs"
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+OUT = ROOT / "docs"
 
 CSS = """
 :root{--fg:#1d1d1f;--muted:#5b5b66;--line:#e6e6eb;--bg:#fbfbfd;--accent:#c2410c;--soft:#fff4ed}
@@ -41,9 +42,78 @@ ul.check li:before{content:"☐";position:absolute;left:2px;color:var(--accent)}
 .card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;text-decoration:none;color:var(--fg)}
 .card b{display:block;margin-bottom:4px}
 .card span{color:var(--muted);font-size:14px}
+.prompt{position:relative}
+.prompt pre{white-space:pre-wrap;padding-top:40px}
+.copy{position:absolute;top:8px;right:8px;background:#fff;color:var(--fg);border:0;border-radius:6px;padding:4px 12px;font:600 13px/1.6 inherit;cursor:pointer}
+blockquote{margin:12px 0;padding:0 0 0 12px;border-left:3px solid var(--line);color:var(--muted);font-size:14px}
 footer{margin-top:48px;padding-top:16px;padding-bottom:40px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
 @media (max-width:600px){h1{font-size:28px}header nav{display:none}}
 """
+
+COPY_JS = """<script>
+document.querySelectorAll('.copy').forEach(function(b){b.addEventListener('click',function(){
+  var t=b.parentNode.querySelector('code').innerText;
+  navigator.clipboard.writeText(t).then(function(){b.textContent='Đã copy';setTimeout(function(){b.textContent='Copy'},1500)});
+});});
+</script>"""
+
+
+def inline(text):
+    """Markdown inline: `code`, **đậm**, [link](url). Link .md trong repo trỏ về GitHub."""
+    out = html.escape(text, quote=False)
+    out = re.sub(r"`([^`]+)`", r"<code>\1</code>", out)
+    out = re.sub(r"\*\*([^*]+)\*\*", r"<b>\1</b>", out)
+    def link(m):
+        href = m.group(2)
+        if not href.startswith("http"):
+            href = f"{REPO}/blob/main/examples/{href}"
+        return f'<a href="{href}">{m.group(1)}</a>'
+    return re.sub(r"\[([^\]]+)\]\(([^)]+)\)", link, out)
+
+
+def markdown_page(path):
+    """Đổi một file markdown đơn giản (tiêu đề, đoạn, danh sách, khối code, trích dẫn) thành HTML.
+    Khối ```text là prompt: có nút Copy."""
+    lines = path.read_text(encoding="utf-8").splitlines()
+    out, para, items, i = [], [], [], 0
+    def flush():
+        if para:
+            out.append("<p>" + inline(" ".join(para)) + "</p>")
+            para.clear()
+        if items:
+            out.append("<ul>" + "".join(f"<li>{inline(x)}</li>" for x in items) + "</ul>")
+            items.clear()
+    while i < len(lines):
+        line = lines[i]
+        if line.startswith("```"):
+            flush()
+            lang, block = line[3:].strip(), []
+            i += 1
+            while i < len(lines) and not lines[i].startswith("```"):
+                block.append(lines[i])
+                i += 1
+            code = f"<pre><code>{html.escape(chr(10).join(block))}</code></pre>"
+            out.append(f'<div class="prompt"><button class="copy" type="button">Copy</button>{code}</div>' if lang in ("text", "sql") else code)
+        elif line.startswith("# "):
+            flush()
+            out.append(f"<h1>{inline(line[2:])}</h1>")
+        elif line.startswith("## "):
+            flush()
+            out.append(f"<h2>{inline(line[3:])}</h2>")
+        elif line.startswith("> "):
+            flush()
+            out.append(f"<blockquote>{inline(line[2:])}</blockquote>")
+        elif line.startswith("- "):
+            if para:
+                flush()
+            items.append(line[2:])
+        elif not line.strip():
+            flush()
+        else:
+            para.append(line.strip())
+        i += 1
+    flush()
+    return "\n".join(out) + COPY_JS
 
 FOOT_NOTE = (
     '<div class="note">Nội dung do một dev tổng hợp và đối chiếu với văn bản gốc, '
@@ -129,6 +199,7 @@ f"""
 <a class="card" href="mau-chinh-sach-bao-mat.html"><b>Chính sách bảo mật cần có gì</b><span>Các mục bắt buộc, form đồng ý, banner cookie</span></a>
 <a class="card" href="muc-phat-du-lieu-ca-nhan.html"><b>Mức phạt vi phạm dữ liệu cá nhân</b><span>Bảng NĐ 330/2026, tổ chức và hộ kinh doanh</span></a>
 <a class="card" href="shop-nho-ho-kinh-doanh.html"><b>Shop nhỏ, hộ kinh doanh được miễn gì</b><span>Điều 38 Luật 91/2025 nói gì, việc nào vẫn phải làm</span></a>
+<a class="card" href="prompt-cho-vibe-coder.html"><b>Prompt dán là chạy cho Lovable, Bolt, v0, Cursor</b><span>Kiểm tra app, banner cookie, ô đồng ý, chính sách, nút xóa tài khoản</span></a>
 </div>
 
 <h2>Theo luật nào</h2>
@@ -298,6 +369,14 @@ PAGES.append(("shop-nho-ho-kinh-doanh",
 """,
 [("Hộ kinh doanh có phải chỉ định người bảo vệ dữ liệu không?", "Không, theo khoản 3 Điều 38 Luật 91/2025, trừ khi kinh doanh dịch vụ xử lý dữ liệu, trực tiếp xử lý dữ liệu nhạy cảm hoặc xử lý dữ liệu của số lượng lớn người."),
  ("Cá nhân bán hàng online có được miễn như hộ kinh doanh không?", "Điều 38 chỉ nhắc hộ kinh doanh, doanh nghiệp siêu nhỏ, doanh nghiệp nhỏ và khởi nghiệp, không nhắc cá nhân. Luật 91/2025 vẫn áp dụng với cá nhân có thu thập dữ liệu của người khác, nên hỏi người làm luật cho trường hợp cụ thể.")]))
+
+# ---------- Prompt cho vibe coder (nội dung lấy từ examples/vibe-coder-prompts.md) ----------
+PAGES.append(("prompt-cho-vibe-coder",
+"Prompt kiểm tra app có đúng luật Việt Nam cho Lovable, Bolt, v0, Cursor",
+"Bộ prompt copy dán là chạy cho người làm app bằng AI: kiểm tra app theo luật dữ liệu cá nhân Việt Nam, banner cookie, ô đồng ý, chính sách bảo mật, nút xóa tài khoản. React, Next.js, Supabase, Firebase.",
+markdown_page(ROOT / "examples" / "vibe-coder-prompts.md"),
+[("Prompt này dùng được cho công cụ nào?", "Mọi công cụ làm app bằng AI có khung chat và đọc được code dự án: Lovable, Bolt, v0, Cursor, Claude, Copilot, Windsurf. Prompt viết sẵn cho React, Next.js dùng Supabase hoặc Firebase."),
+ ("Chạy prompt xong là app đúng luật chưa?", "Chưa chắc. Prompt giúp sửa các lỗi hay gặp nhất trong code như ô đồng ý tích sẵn, Google Analytics chạy trước khi đồng ý, thiếu chính sách. Giấy tờ như hồ sơ chuyển dữ liệu ra nước ngoài vẫn nên hỏi người làm luật.")]))
 
 
 def main():
