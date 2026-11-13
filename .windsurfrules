@@ -37,7 +37,7 @@ Mọi đường dẫn trong file này (`references/`, `scripts/`, `examples/`, `
    - `09-mobile-app.md`: Mobile app (luôn thêm nếu scan báo MOBILE_APP, bất kể mức độ ở bước 1)
    - `10-generate-policy.md`: Soạn chính sách bảo mật và form đồng ý từ kết quả quét (chỉ dùng khi người dùng yêu cầu soạn/sửa chính sách hoặc sửa các mục 🔴 dữ liệu cá nhân)
 3. Với mỗi mục checklist: đọc code/nội dung website thực tế (footer, trang chính sách, form thu thập dữ liệu, cookie banner, trang sản phẩm...) để xác định trạng thái. Chưa kiểm tra thì không suy đoán.
-4. Tổng hợp kết quả theo mẫu tại `examples/sample-audit-report.md`. Với site mức 0-1, dùng bản rút gọn (không liệt kê các checklist không áp dụng thành bảng dài).
+4. Tổng hợp kết quả theo mẫu tại `examples/sample-audit-report.md`. Với site mức 0-1, dùng bản rút gọn (không liệt kê các checklist không áp dụng thành bảng dài). **Mỗi mục 🔴 kèm một "Prompt sửa"** ngắn trong khối code để người dùng copy dán vào công cụ vibe code (Lovable, Bolt, v0, Cursor...): lấy từ mục "Prompt sửa nhanh theo từng lỗi 🔴" trong `examples/vibe-coder-prompts.md` nếu cùng loại lỗi và điền file:dòng thật; lỗi khác thì viết theo cùng kiểu (nêu file, dòng, việc cần làm, kết bằng "Không sửa chỗ khác.").
 5. Mở đầu báo cáo bằng dòng "🤖 Báo cáo do AI tạo..." theo `examples/sample-audit-report.md`, và đóng báo cáo bằng phần "Giới hạn & Khuyến nghị" (xem DISCLAIMER.md) nhắc đây không phải ý kiến pháp lý chính thức.
 6. Nếu site thu thập dữ liệu cá nhân mà thiếu chính sách hoặc xin đồng ý sai cách, cuối báo cáo gợi ý một câu: có thể bảo agent "soạn chính sách bảo mật cho dự án này". Khi người dùng yêu cầu, làm theo `references/10-generate-policy.md` với khung `examples/privacy-policy-template.md`.
 

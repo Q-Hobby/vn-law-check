@@ -11,6 +11,8 @@ Có 2 mẫu. Chọn theo mức ở bước triage (`references/00-triage.md`):
 
 Ở cả 2 mẫu, chỉ liệt kê lĩnh vực có áp dụng. Các lĩnh vực không áp dụng gom vào 1 dòng, không kẻ bảng ⚪.
 
+Ở cả 2 mẫu, **mỗi mục 🔴 kèm một "Prompt sửa"**: 1-4 câu trong khối code, để người dùng copy dán vào công cụ vibe code (Lovable, Bolt, v0, Cursor, Claude...). Lấy đúng prompt ở mục "Prompt sửa nhanh theo từng lỗi 🔴" trong `examples/vibe-coder-prompts.md` nếu cùng loại lỗi, thay phần trong ngoặc vuông bằng file:dòng, tên dịch vụ, câu trích thật. Lỗi khác thì viết theo cùng kiểu: nêu file, dòng, việc cần làm, kết bằng "Không sửa chỗ khác." Không viết prompt sửa cho 🟡 🟢, trừ khi người dùng hỏi.
+
 ---
 
 ## Mẫu A: rút gọn (site mức 0-1)
@@ -43,7 +45,19 @@ Có 2 mẫu. Chọn theo mức ở bước triage (`references/00-triage.md`):
 > |---|---|---|---|---|
 > | 🔴 | B. Consent | Form thu thập họ tên, email nhưng không có thông báo mục đích xử lý hay ô đồng ý | Luật BVDLCN 91/2025/QH15, NĐ 356/2025/NĐ-CP | Thêm 1 dòng nêu mục đích + ô đồng ý (không tích sẵn) cạnh nút Gửi, lưu lại thời điểm đồng ý |
 > | 🔴 | C. Cookie | Google Analytics chạy ngay khi tải trang, trước khi người dùng đồng ý | Luật BVDLCN 91/2025/QH15 | Thêm banner cookie, chỉ nạp GA sau khi người dùng đồng ý |
-> | 🟡 | A. Chính sách | Không có trang chính sách bảo vệ dữ liệu cá nhân | Luật BVDLCN 91/2025/QH15 | Thêm trang chính sách ngắn, link ở footer |
+> | 🟡 | A. Chính sách | Chưa tìm thấy trang chính sách bảo vệ dữ liệu cá nhân | Luật BVDLCN 91/2025/QH15 | Thêm trang chính sách ngắn, link ở footer |
+>
+> **Prompt sửa** (copy dán vào công cụ bạn đang dùng):
+>
+> 🔴 B. Consent
+> ```text
+> Form ở index.html:14 đang thu thông tin cá nhân mà chưa nói thu để làm gì. Thêm ngay trên nút gửi: một câu nêu rõ thu dữ liệu gì, để làm gì, link tới trang chính sách bảo mật, và một ô đồng ý KHÔNG tích sẵn, chưa tích thì không gửi được. Khi gửi thành công, lưu thời điểm đồng ý, mục đích và phiên bản chính sách. Không sửa chỗ khác.
+> ```
+>
+> 🔴 C. Cookie
+> ```text
+> Google Analytics đang chạy ngay khi mở trang (index.html:5). Gỡ script này khỏi chỗ tự chạy và chỉ nạp sau khi người dùng bấm "Đồng ý" trên banner cookie. Chưa có banner thì tạo một banner có hai nút "Từ chối" và "Đồng ý" to bằng nhau, lưu lựa chọn trong localStorage, có nút "Cài đặt cookie" ở footer để đổi lại. Từ chối vẫn dùng được trang. Làm xong, chỉ tôi cách kiểm tra trong DevTools tab Network.
+> ```
 >
 > **Không áp dụng:** TMĐT, bảo vệ người tiêu dùng, giao dịch điện tử (không bán hàng); an ninh mạng (không xử lý dữ liệu quy mô lớn); quảng cáo (không có nội dung quảng cáo); AI (không có chatbot). Formspree đặt server ở nước ngoài → nếu lượng liên hệ lớn, xem thêm mục D (chuyển dữ liệu xuyên biên giới).
 >
@@ -77,6 +91,11 @@ Chỉ ghi các lĩnh vực có áp dụng.
 
 #### 🔴 Cần xử lý ngay
 - **[Mục checklist]**: [vấn đề, kèm file:dòng hoặc URL trang]. Căn cứ: [số hiệu văn bản, Điều/khoản nếu có]. Đề xuất: [việc cụ thể cần làm]
+
+  Prompt sửa:
+  ```text
+  [Prompt từ examples/vibe-coder-prompts.md mục 6, đã điền file:dòng thật. Ví dụ: Ô đồng ý ở components/OrderForm.tsx:42 đang được tích sẵn. Bỏ checked, defaultChecked hoặc state khởi tạo bằng true để ô luôn trống khi mở form; người dùng phải tự tích. Không sửa chỗ khác.]
+  ```
 
 #### 🟡 Nên cải thiện
 - ...

@@ -94,9 +94,14 @@ def markdown_page(path):
                 i += 1
             code = f"<pre><code>{html.escape(chr(10).join(block))}</code></pre>"
             out.append(f'<div class="prompt"><button class="copy" type="button">Copy</button>{code}</div>' if lang in ("text", "sql") else code)
+        elif line.startswith("<!--"):
+            flush()  # ghi chú cho máy (ví dụ fix-id), không hiện lên trang
         elif line.startswith("# "):
             flush()
             out.append(f"<h1>{inline(line[2:])}</h1>")
+        elif line.startswith("### "):
+            flush()
+            out.append(f"<h3>{inline(line[4:])}</h3>")
         elif line.startswith("## "):
             flush()
             out.append(f"<h2>{inline(line[3:])}</h2>")
